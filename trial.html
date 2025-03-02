@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFK - Private Sharing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: beige;
+            color: black;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .post-form {
+            margin-bottom: 30px;
+            background: #007BFF; /* Blue */
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+        }
+        .post-input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 8px;
+        }
+        .posts-container {
+            margin-top: 20px;
+        }
+        .post {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: white;
+        }
+        .media {
+            max-width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="post-form">
+        <h1>AFK Private Share</h1>
+        <input type="text" id="author" class="post-input" placeholder="Your name" required>
+        <textarea id="content" class="post-input" placeholder="Message" required></textarea>
+        <input type="file" id="media" class="post-input" accept="image/*, video/*">
+        <button onclick="submitPost()">Post</button>
+    </div>
+    <div class="posts-container" id="posts"></div>
+
+    <script>
+        function submitPost() {
+            const author = document.getElementById('author').value;
+            const content = document.getElementById('content').value;
+            const mediaInput = document.getElementById('media');
+            const mediaFile = mediaInput.files[0];
+
+            const postContainer = document.getElementById('posts');
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post';
+
+            const mediaType = mediaFile ? mediaFile.type.split('/')[0] : null;
+            const mediaUrl = mediaFile ? URL.createObjectURL(mediaFile) : null;
+
+            postDiv.innerHTML = `
+                <h3>${author}</h3>
+                <p>${content}</p>
+                ${mediaUrl ? `<${mediaType === 'image' ? 'img' : 'video'} class="media" controls src="${mediaUrl}"></${mediaType === 'image' ? 'img' : 'video'}>` : ''}
+                <small>${new Date().toLocaleString()}</small>
+            `;
+
+            postContainer.prepend(postDiv);
+
+            // Clear the input fields
+            document.getElementById('author').value = '';
+            document.getElementById('content').value = '';
+            mediaInput.value = '';
+        }
+    </script>
+</body>
+</html>
